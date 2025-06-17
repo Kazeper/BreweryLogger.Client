@@ -1,62 +1,36 @@
-import { memo, useRef } from "react";
-import NewIngredient from "./NewIngredient";
-import { useStoreroomContext } from "../../hooks/context";
+import { memo } from "react";
+import { Table } from "@mantine/core";
 
 function NewIngredientList({ newIngredients, removeNewIngredient }) {
-  const { addNewIngredient } = useStoreroomContext();
-  const nameInput = useRef(null);
-  const amountInput = useRef(null);
-  const unitInput = useRef(null);
-
-  const handleAdd = () => {
-    //add validation one day...
-    const newIngredient = {
-      name: nameInput.current.value,
-      amount: amountInput.current.value,
-      unit: unitInput.current.value,
-    };
-
-    addNewIngredient(newIngredient);
-    nameInput.current.value = "";
-    amountInput.current.value = "";
-    unitInput.current.value = "";
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+  const rows = newIngredients.map((ingredient) => (
+    <Table.Tr key={ingredient.id}>
+      <Table.Td>{ingredient.name}</Table.Td>
+      <Table.Td>{ingredient.amount}</Table.Td>
+      <Table.Td>{ingredient.unit}</Table.Td>
+      <Table.Td>
+        <button
+          type="button"
+          onClick={() => removeNewIngredient(ingredient.id)}
+        >
+          Remove
+        </button>
+      </Table.Td>
+    </Table.Tr>
+  ));
 
   return (
-    <div>
-      <div>
-        <input type="text" ref={nameInput} name="name" placeholder="name" />
-        <input
-          type="text"
-          ref={amountInput}
-          name="amount"
-          placeholder="amount"
-        />
-        <input type="text" ref={unitInput} name="unit" placeholder="unit" />
-        <button type="button" onClick={handleAdd}>
-          Add
-        </button>
-      </div>
-      <hr style={{ marginTop: "2rem" }} />
-      <div>
-        {newIngredients.map((i) => {
-          return (
-            <NewIngredient
-              key={i.id}
-              {...i}
-              handleRemove={removeNewIngredient}
-            />
-          );
-        })}
-        <button type="button" onClick={handleSubmit}>
-          SAVE
-        </button>
-      </div>
-    </div>
+    <Table>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Name</Table.Th>
+          <Table.Th>Amount</Table.Th>
+          <Table.Th>Unit</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{rows}</Table.Tbody>
+      <Table.Caption>Ingredients requested to save</Table.Caption>
+    </Table>
   );
 }
+
 export default memo(NewIngredientList);

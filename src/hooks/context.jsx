@@ -14,8 +14,9 @@ export function StoreroomProvider({ children }) {
   };
 
   const removeNewIngredient = useCallback((id) => {
-    const newValue = newIngredients.filter((i) => i.id !== id);
-    setNewIngredients(newValue);
+    setNewIngredients((prevNewIngredients) =>
+      prevNewIngredients.filter((i) => i.id !== id)
+    );
   }, []);
 
   return (
