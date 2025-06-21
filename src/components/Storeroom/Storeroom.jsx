@@ -1,11 +1,22 @@
 import { useStoreroomContext } from "../../hooks/context";
+import {
+  useFetchIngredients,
+  useSaveIngredients,
+} from "../../hooks/ingredientsReactQueryHooks";
 import IngredientList from "./IngredientList";
 import NewIngredientList from "./NewIngredientList";
 import { useRef } from "react";
 
 function Storeroom() {
-  const { newIngredients, removeNewIngredient, addNewIngredient } =
-    useStoreroomContext();
+  const {
+    newIngredients,
+    removeNewIngredient,
+    addNewIngredient,
+    clearNewIngredients,
+  } = useStoreroomContext();
+
+  const { isLoading, isError, data } = useFetchIngredients();
+  const { saveIngredients, isPending } = useSaveIngredients();
 
   const nameInput = useRef(null);
   const amountInput = useRef(null);
@@ -25,7 +36,16 @@ function Storeroom() {
     unitInput.current.value = "";
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (!newIngredients || newIngredients.length < 1) {
+      return;
+    }
+    saveIngredients(newIngredients, { onSuccess: () => clearNewIngredients() });
+  };
+
+  if (isLoading) {
+    return <p style={{ marginTop: "1rem" }}>Loading...</p>;
+  }
 
   return (
     <section>
@@ -49,15 +69,26 @@ function Storeroom() {
         </div>
         <hr style={{ marginTop: "2rem" }} />
 
-        <NewIngredientList
-          newIngredients={newIngredients}
-          removeNewIngredient={removeNewIngredient}
-        />
-        <button type="button" onClick={handleSubmit}>
-          SAVE
-        </button>
+        {isPending ? (
+          <h4>handling your request...</h4>
+        ) : (
+          <>
+            <NewIngredientList
+              newIngredients={newIngredients}
+              removeNewIngredient={removeNewIngredient}
+            />
+            <button type="button" onClick={handleSubmit}>
+              SAVE
+            </button>
+          </>
+        )}
       </div>
-      <IngredientList />
+
+      {isError ? (
+        <p>We are sorry, but we weren't able to retrieve your data</p>
+      ) : (
+        <IngredientList ingredients={data} />
+      )}
     </section>
   );
 }

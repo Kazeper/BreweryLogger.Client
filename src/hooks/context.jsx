@@ -19,9 +19,18 @@ export function StoreroomProvider({ children }) {
     );
   }, []);
 
+  const clearNewIngredients = () => {
+    setNewIngredients([]);
+  };
+
   return (
     <StoreroomContext.Provider
-      value={{ newIngredients, addNewIngredient, removeNewIngredient }}
+      value={{
+        newIngredients,
+        addNewIngredient,
+        removeNewIngredient,
+        clearNewIngredients,
+      }}
     >
       {children}
     </StoreroomContext.Provider>
