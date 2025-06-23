@@ -243,6 +243,8 @@ ul {
 
 .title {
   text-align: center;
+  margin: 2rem 0px;
+  font-size: 1.5rem;
 }
 
 .title-underline {
@@ -261,7 +263,7 @@ main {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   background: var(--grey-100);
 }
 
@@ -284,6 +286,13 @@ nav .nav-item {
 
 nav a:hover {
   background-color: #444; /* Highlights on hover */
+}
+
+.input-no-border {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 1rem;
 }
 
 /* .sidebar-toggle {
@@ -396,3 +405,19 @@ Sidebar
 .social-links a:hover {
   color: var(--primary-800);
 } */
+.new-items-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin: 4rem 0;
+}
+
+.inputs-container {
+  margin: 1rem 0;
+}
+
+.btn-ingredient-scnd {
+  width: 3rem;
+}

@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import breweryAxios from "../utils";
@@ -6,6 +7,7 @@ export function useFetchIngredients() {
   const { isLoading, isError, data } = useQuery({
     queryKey: ["ingredients"],
     queryFn: async () => {
+      console.log("fetching data");
       const { data } = await breweryAxios.get("/ingredient/all");
       return data;
     },
@@ -26,7 +28,11 @@ export function useSaveIngredients() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ingredients"] });
-      //TODO add toast
+      notifications.show({
+        // id: "ingredients",
+        title: "Ingredients",
+        message: "Item(s) saved successfully!",
+      });
     },
     onError: (error) => {
       console.log(error);
@@ -35,6 +41,26 @@ export function useSaveIngredients() {
 
   return { saveIngredients, isPending };
 }
+
+export const useUpdateIngredient = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate: updateIngredient, isPending: updateIngredientLoading } =
+    useMutation({
+      mutationFn: (ingredient) => {
+        return breweryAxios.put(`/ingredient/${ingredient.id}`, ingredient);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["ingredients"] });
+        notifications.show({
+          // id: "ingredients",
+          title: "Ingredients",
+          message: "Item updated!",
+        });
+      },
+    });
+  return { updateIngredient, updateIngredientLoading };
+};
 
 export const useDeleteIngredient = () => {
   const queryClient = useQueryClient();
@@ -46,6 +72,11 @@ export const useDeleteIngredient = () => {
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["ingredients"] });
+        notifications.show({
+          // id: "ingredients",
+          title: "Ingredients",
+          message: "Item removed!",
+        });
       },
     });
   return { deleteIngredient, deleteIngredientLoading };

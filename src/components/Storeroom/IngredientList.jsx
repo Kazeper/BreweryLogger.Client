@@ -1,25 +1,11 @@
 import { memo } from "react";
 import { Table } from "@mantine/core";
-import { useDeleteIngredient } from "../../hooks/ingredientsReactQueryHooks";
+import EditableIngredientRow from "./EditableIngredientRow";
 
 function IngredientList({ ingredients }) {
-  const { deleteIngredient } = useDeleteIngredient();
-
-  const rows = ingredients.map((ingredient) => (
-    <Table.Tr key={ingredient.id}>
-      <Table.Td>{ingredient.name}</Table.Td>
-      <Table.Td>{ingredient.amount}</Table.Td>
-      <Table.Td>{ingredient.unit}</Table.Td>
-      <Table.Td>
-        <button type="button" onClick={() => console.log("edit")}>
-          Edit
-        </button>
-        <button type="button" onClick={() => deleteIngredient(ingredient.id)}>
-          Remove
-        </button>
-      </Table.Td>
-    </Table.Tr>
-  ));
+  const rows = ingredients.map((ingredient) => {
+    return <EditableIngredientRow key={ingredient.id} {...ingredient} />;
+  });
 
   return (
     <section>

@@ -6,6 +6,7 @@ import {
 import IngredientList from "./IngredientList";
 import NewIngredientList from "./NewIngredientList";
 import { useRef } from "react";
+import { Notification, Button, TextInput, Group } from "@mantine/core";
 
 function Storeroom() {
   const {
@@ -44,30 +45,34 @@ function Storeroom() {
   };
 
   if (isLoading) {
-    return <p style={{ marginTop: "1rem" }}>Loading...</p>;
+    return (
+      <Notification loading={true} withCloseButton={false} title="Loading..." />
+    );
   }
 
   return (
     <section>
-      <p>
+      <p className="title">
         Welcome in your storeroom! You can add, remove and update your
         ingredients!
       </p>
       <div className="new-items-container">
-        <div>
-          <input type="text" ref={nameInput} name="name" placeholder="name" />
-          <input
-            type="text"
-            ref={amountInput}
-            name="amount"
-            placeholder="amount"
-          />
-          <input type="text" ref={unitInput} name="unit" placeholder="unit" />
-          <button type="button" onClick={handleAdd}>
-            Add
-          </button>
+        <div className="inputs-container">
+          <Group gap="xs">
+            <TextInput ref={nameInput} name="name" placeholder="name" />
+            <TextInput ref={amountInput} name="amount" placeholder="amount" />
+            <TextInput
+              type="text"
+              ref={unitInput}
+              name="unit"
+              placeholder="unit"
+            />
+            <Button size="compact-md" ml="sm" onClick={handleAdd}>
+              Add
+            </Button>
+          </Group>
         </div>
-        <hr style={{ marginTop: "2rem" }} />
+        <hr style={{ marginTop: "2rem", width: "100%" }} />
 
         {isPending ? (
           <h4>handling your request...</h4>
@@ -77,9 +82,13 @@ function Storeroom() {
               newIngredients={newIngredients}
               removeNewIngredient={removeNewIngredient}
             />
-            <button type="button" onClick={handleSubmit}>
+            <Button
+              style={{ marginTop: "1rem" }}
+              color="teal"
+              onClick={handleSubmit}
+            >
               SAVE
-            </button>
+            </Button>
           </>
         )}
       </div>

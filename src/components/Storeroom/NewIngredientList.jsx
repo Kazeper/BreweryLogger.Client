@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Table } from "@mantine/core";
+import { Table, Button } from "@mantine/core";
 
 function NewIngredientList({ newIngredients, removeNewIngredient }) {
   const rows = newIngredients.map((ingredient) => (
@@ -8,12 +8,14 @@ function NewIngredientList({ newIngredients, removeNewIngredient }) {
       <Table.Td>{ingredient.amount}</Table.Td>
       <Table.Td>{ingredient.unit}</Table.Td>
       <Table.Td>
-        <button
+        <Button
+          size="xs"
           type="button"
+          color="red"
           onClick={() => removeNewIngredient(ingredient.id)}
         >
           Remove
-        </button>
+        </Button>
       </Table.Td>
     </Table.Tr>
   ));
